@@ -65,7 +65,7 @@ export default function Home() {
         {/* HEADER */}
         <div className="flex justify-between items-center mb-5">
           <h1 className="text-xl font-bold text-blue-400">
-            🛒 Muki Market
+            🛒 Miki Market
           </h1>
 
           <button
