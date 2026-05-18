@@ -59,6 +59,15 @@ export default function Home() {
     }
   }, []);
 
+  const handleProductClick = (product) => {
+    // If clicked again, close it. Otherwise, set the product.
+    if (selectedProduct?.id === product.id) {
+      setSelectedProduct(null);
+    } else {
+      setSelectedProduct(product);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-slate-900 text-white relative">
       
@@ -102,78 +111,92 @@ export default function Home() {
 
         {/* PRODUCTS GRID */}
         <div className="grid grid-cols-2 gap-4">
-          {filtered.map((product) => (
-            <div
-              key={product.id}
-              onClick={() => setSelectedProduct(product)}
-              className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700/50 active:scale-[0.98] transition-transform cursor-pointer"
-            >
-              <img src={product.image} className="w-full h-32 object-cover" alt="" />
-              <div className="p-3">
-                <h2 className="font-semibold text-sm line-clamp-1">{product.title}</h2>
-                <p className="text-sky-400 font-bold text-sm mt-0.5">{product.price}</p>
-                <p className="text-[11px] opacity-60 mt-1">
-                  {product.available ? "● Available" : "● Out of Stock"}
-                </p>
+          {filtered.map((product) => {
+            const isOpened = selectedProduct?.id === product.id;
+            return (
+              <div key={product.id} className="col-span-1 dynamic-product-wrapper">
+                {/* Individual card container */}
+                <div
+                  onClick={() => handleProductClick(product)}
+                  className={`bg-slate-800 rounded-2xl overflow-hidden border transition-all duration-200 cursor-pointer h-full ${
+                    isOpened ? "border-blue-500 shadow-lg shadow-blue-500/10" : "border-slate-700/50"
+                  } active:scale-[0.98]`}
+                >
+                  <img src={product.image} className="w-full h-32 object-cover" alt="" />
+                  <div className="p-3">
+                    <h2 className="font-semibold text-sm line-clamp-1">{product.title}</h2>
+                    <p className="text-sky-400 font-bold text-sm mt-0.5">{product.price}</p>
+                    <p className="text-[11px] opacity-60 mt-1">
+                      {product.available ? "● Available" : "● Out of Stock"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ================= INLINE EXPANDED PRODUCT DETAIL PANEL ================= */}
+        {/* Instead of taking over the window, this expands dynamically within the main view */}
+        <div 
+          className={`transition-all duration-300 ease-out overflow-hidden ${
+            selectedProduct ? "max-h-[1000px] opacity-100 mt-6" : "max-h-0 opacity-0 mt-0 pointer-events-none"
+          }`}
+        >
+          {selectedProduct && (
+            <div className="bg-slate-800 w-full rounded-2xl p-5 border border-slate-700 shadow-2xl relative">
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h2 className="text-xl font-bold mb-0.5">{selectedProduct.title}</h2>
+                  <p className="text-xl font-extrabold text-sky-400">{selectedProduct.price}</p>
+                </div>
+                <button 
+                  onClick={() => setSelectedProduct(null)} 
+                  className="bg-slate-700/60 hover:bg-slate-700 text-slate-300 w-7 h-7 rounded-full text-xs font-bold transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-xs text-slate-400 mb-4 leading-relaxed">{selectedProduct.description}</p>
+
+              {/* SPECS BLOCK */}
+              <div className="bg-slate-900/80 p-3 rounded-xl mb-4 border border-slate-700/40">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Specifications</h3>
+                <div className="space-y-1.5">
+                  {Object.entries(selectedProduct.specs).map(([key, value]) => (
+                    <div key={key} className="flex justify-between text-xs">
+                      <span className="capitalize text-slate-400">{key}</span>
+                      <span className="font-medium text-slate-200">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <p className="text-xs mb-4">
+                Status: <span className={selectedProduct.available ? "text-green-400" : "text-red-400"}>
+                  {selectedProduct.available ? "Available" : "Not Available"}
+                </span>
+              </p>
+
+              {/* INTERACTION BUTTONS */}
+              <div className="grid grid-cols-2 gap-2">
+                <button 
+                  className={`w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-95 text-center ${
+                    selectedProduct.available ? "bg-emerald-500 text-white" : "bg-slate-700 text-slate-500"
+                  }`}
+                  disabled={!selectedProduct.available}
+                >
+                  Is this available?
+                </button>
+                <button className="w-full bg-blue-500 py-3 rounded-xl font-bold text-sm transition-all active:scale-95">
+                  Contact Seller
+                </button>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </main>
-
-      {/* ================= FIXED CENTERED PRODUCT DETAIL MODAL ================= */}
-      {selectedProduct && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[9999]">
-          {/* Clicking the blurred background closes the detail screen */}
-          <div className="absolute inset-0 w-full h-full" onClick={() => setSelectedProduct(null)} />
-          
-          {/* Main Popup White/Slate Box Container */}
-          <div className="bg-slate-800 w-full max-w-sm rounded-2xl p-5 relative z-10 max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-700">
-            
-            <img src={selectedProduct.image} className="w-full h-44 object-cover rounded-xl mb-4" alt="" />
-
-            <h2 className="text-xl font-bold mb-1">{selectedProduct.title}</h2>
-            <p className="text-xl font-extrabold text-sky-400 mb-2">{selectedProduct.price}</p>
-            <p className="text-xs text-slate-400 mb-4 leading-relaxed">{selectedProduct.description}</p>
-
-            {/* SPECS BLOCK */}
-            <div className="bg-slate-900/80 p-3 rounded-xl mb-4 border border-slate-700/40">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Specifications</h3>
-              <div className="space-y-1.5">
-                {Object.entries(selectedProduct.specs).map(([key, value]) => (
-                  <div key={key} className="flex justify-between text-xs">
-                    <span className="capitalize text-slate-400">{key}</span>
-                    <span className="font-medium text-slate-200">{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <p className="text-xs mb-4">
-              Status: <span className={selectedProduct.available ? "text-green-400" : "text-red-400"}>
-                {selectedProduct.available ? "Available" : "Not Available"}
-              </span>
-            </p>
-
-            {/* INTERACTION BUTTONS */}
-            <div className="space-y-2">
-              <button 
-                className={`w-full py-3 rounded-xl font-bold text-sm transition-all active:scale-95 ${selectedProduct.available ? "bg-emerald-500" : "bg-slate-700 text-slate-500"}`}
-                disabled={!selectedProduct.available}
-              >
-                Is this available?
-              </button>
-              <button className="w-full bg-blue-500 py-3 rounded-xl font-bold text-sm transition-all active:scale-95">
-                Contact Seller
-              </button>
-              <button onClick={() => setSelectedProduct(null)} className="w-full bg-slate-700 py-3 rounded-xl text-sm font-medium transition-colors">
-                Close
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
 
       {/* ================= ADD PRODUCT PLACEHOLDER MODAL ================= */}
       {showAddForm && (
