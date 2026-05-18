@@ -57,6 +57,7 @@ export default function Home() {
     if (window.Telegram?.WebApp) {
       window.Telegram.WebApp.expand();
     }
+    
   }, []);
 
   return (
