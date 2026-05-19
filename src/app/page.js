@@ -133,8 +133,8 @@ export default function Home() {
           ))}
         </div>
 
-        {/* PRODUCTS GRID */}
-        <div className="grid grid-cols-2 gap-3 items-start">
+        {/* PRODUCTS FLEX LAYOUT */}
+        <div className="flex flex-wrap gap-[4%]">
 
           {filtered.map((product) => {
             const isOpen = openId === product.id;
@@ -142,7 +142,7 @@ export default function Home() {
             return (
               <div
                 key={product.id}
-                className={`w-full min-w-0 bg-slate-800 rounded-2xl overflow-hidden border transition-all duration-300 ${
+                className={`w-[48%] mb-4 bg-slate-800 rounded-2xl overflow-hidden border transition-all duration-300 ${
                   isOpen
                     ? "border-blue-500"
                     : "border-slate-700"
@@ -157,7 +157,7 @@ export default function Home() {
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="w-full h-24 object-cover"
+                    className="w-full h-28 object-cover"
                   />
 
                   <div className="p-2.5">
@@ -179,9 +179,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* EXPANDED DETAILS */}
+                {/* DETAILS */}
                 <div
-                  className={`transition-all duration-300 overflow-hidden ${
+                  className={`overflow-hidden transition-all duration-300 ${
                     isOpen
                       ? "max-h-[500px] opacity-100 p-2.5 pt-0"
                       : "max-h-0 opacity-0"
@@ -225,7 +225,7 @@ export default function Home() {
                       {/* BUTTONS */}
                       <div className="grid grid-cols-1 gap-2">
 
-                        {/* ORIGINAL BUTTON */}
+                        {/* KEEPING YOUR BUTTON */}
                         <button
                           className={`w-full py-2 rounded-xl font-bold text-[11px] transition-all active:scale-95 ${
                             product.available
@@ -260,17 +260,15 @@ export default function Home() {
 
       </main>
 
-      {/* ADD PRODUCT MODAL */}
+      {/* MODAL */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
 
-          {/* CLOSE AREA */}
           <div
             className="absolute inset-0"
             onClick={() => setShowAddForm(false)}
           />
 
-          {/* MODAL */}
           <div className="relative bg-slate-800 w-full max-w-sm p-5 rounded-2xl border border-slate-700 z-10">
 
             <h2 className="font-bold text-lg mb-4">
