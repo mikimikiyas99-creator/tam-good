@@ -21,6 +21,7 @@ const products = [
     image:
       "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800",
   },
+
   {
     id: 2,
     title: "Gaming Laptop",
@@ -37,6 +38,7 @@ const products = [
     image:
       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=800",
   },
+
   {
     id: 3,
     title: "Nike Air",
@@ -53,6 +55,7 @@ const products = [
     image:
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800",
   },
+
   {
     id: 4,
     title: "MacBook Pro",
@@ -95,10 +98,12 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-slate-900 text-white">
-      <main className="max-w-md mx-auto p-4 pb-24">
+
+      {/* MAIN */}
+      <main className="w-full px-3 pb-24">
 
         {/* HEADER */}
-        <div className="flex justify-between items-center mb-5">
+        <div className="flex justify-between items-center py-4">
           <h1 className="text-xl font-bold text-blue-400">
             🛒 Miki Market
           </h1>
@@ -112,12 +117,12 @@ export default function Home() {
         </div>
 
         {/* CATEGORIES */}
-        <div className="flex gap-2 overflow-x-auto mb-5 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto mb-4 scrollbar-hide">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm whitespace-nowrap transition-all ${
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm transition-all ${
                 selectedCategory === cat
                   ? "bg-blue-500 text-white"
                   : "bg-slate-800 text-slate-300"
@@ -129,20 +134,22 @@ export default function Home() {
         </div>
 
         {/* PRODUCTS GRID */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 items-start">
+
           {filtered.map((product) => {
             const isOpen = openId === product.id;
 
             return (
               <div
                 key={product.id}
-                className={`bg-slate-800 rounded-2xl overflow-hidden border transition-all duration-300 ${
+                className={`w-full min-w-0 bg-slate-800 rounded-2xl overflow-hidden border transition-all duration-300 ${
                   isOpen
                     ? "border-blue-500"
                     : "border-slate-700"
                 }`}
               >
-                {/* PRODUCT CARD */}
+
+                {/* CARD */}
                 <div
                   onClick={() => toggleProduct(product.id)}
                   className="cursor-pointer"
@@ -153,8 +160,9 @@ export default function Home() {
                     className="w-full h-24 object-cover"
                   />
 
-                  <div className="p-3">
-                    <h2 className="font-semibold text-sm line-clamp-1">
+                  <div className="p-2.5">
+
+                    <h2 className="font-semibold text-sm truncate">
                       {product.title}
                     </h2>
 
@@ -167,14 +175,15 @@ export default function Home() {
                         ? "● Available"
                         : "● Out of stock"}
                     </p>
+
                   </div>
                 </div>
 
-                {/* INLINE DETAILS */}
+                {/* EXPANDED DETAILS */}
                 <div
                   className={`transition-all duration-300 overflow-hidden ${
                     isOpen
-                      ? "max-h-[500px] opacity-100 p-3 pt-0"
+                      ? "max-h-[500px] opacity-100 p-2.5 pt-0"
                       : "max-h-0 opacity-0"
                   }`}
                 >
@@ -182,13 +191,14 @@ export default function Home() {
                     <div className="border-t border-slate-700 pt-3">
 
                       {/* DESCRIPTION */}
-                      <p className="text-xs text-slate-400 mb-3 leading-relaxed">
+                      <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
                         {product.description}
                       </p>
 
                       {/* SPECS */}
                       <div className="bg-slate-900 p-2 rounded-xl mb-3">
-                        <h3 className="text-[11px] text-slate-400 mb-2 uppercase">
+
+                        <h3 className="text-[10px] uppercase text-slate-500 mb-2">
                           Specs
                         </h3>
 
@@ -197,13 +207,13 @@ export default function Home() {
                             ([key, value]) => (
                               <div
                                 key={key}
-                                className="flex justify-between text-[11px]"
+                                className="flex justify-between gap-2 text-[10px]"
                               >
                                 <span className="text-slate-400 capitalize">
                                   {key}
                                 </span>
 
-                                <span className="text-right ml-2">
+                                <span className="text-right">
                                   {value}
                                 </span>
                               </div>
@@ -215,9 +225,9 @@ export default function Home() {
                       {/* BUTTONS */}
                       <div className="grid grid-cols-1 gap-2">
 
-                        {/* KEEPING YOUR ORIGINAL BUTTON */}
+                        {/* ORIGINAL BUTTON */}
                         <button
-                          className={`w-full py-2 rounded-xl font-bold text-xs transition-all active:scale-95 ${
+                          className={`w-full py-2 rounded-xl font-bold text-[11px] transition-all active:scale-95 ${
                             product.available
                               ? "bg-emerald-500 text-white"
                               : "bg-slate-700 text-slate-500"
@@ -227,7 +237,7 @@ export default function Home() {
                           Is this available?
                         </button>
 
-                        <button className="w-full bg-blue-500 py-2 rounded-xl font-bold text-xs transition-all active:scale-95">
+                        <button className="w-full bg-blue-500 py-2 rounded-xl font-bold text-[11px] transition-all active:scale-95">
                           Contact Seller
                         </button>
 
@@ -235,6 +245,7 @@ export default function Home() {
                     </div>
                   )}
                 </div>
+
               </div>
             );
           })}
@@ -246,13 +257,14 @@ export default function Home() {
             No products found
           </p>
         )}
+
       </main>
 
       {/* ADD PRODUCT MODAL */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
 
-          {/* BACKDROP */}
+          {/* CLOSE AREA */}
           <div
             className="absolute inset-0"
             onClick={() => setShowAddForm(false)}
@@ -275,6 +287,7 @@ export default function Home() {
             >
               Close
             </button>
+
           </div>
         </div>
       )}
